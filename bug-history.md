@@ -12,10 +12,6 @@ That was the deeper cause: Parser.java created a JRemAssignOp (%=) instead of a 
 Interpretation : 
 How to read it when it happens again
 
-The stack trace tells you who tripped over the null, not necessarily who's at fault. In your case it died in JAssignOp.analyze (rhs.type()), but the actual culprit was the rhs node — either its analyze() didn't set type, or the parser gave you the wrong node type in the first place. So the debugging move is:
-
-1. Identify which sub-expression is the one returning null (the rhs/lhs/operand being queried).
-2. Check that node's analyze() actually assigns type.
-3. If it looks fine, confirm the parser is even constructing the node you think it is.
+The stack trace tells you who tripped over the null, not necessarily who's at fault.
 
 Short version: type() == null ⇒ "this expression didn't get analyzed properly" ⇒ look at its analyze(), and double-check the parser handed you the right node.
